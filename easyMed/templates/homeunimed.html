@@ -1,0 +1,43 @@
+{% extends 'base1.html' %}
+{% load static %}
+
+
+{% block title %}Appointments{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/container.css' %}">
+<div class="wrapper">
+  <header class="header">Header</header>
+  <article class="main">
+    <p> This is the Unimed home page</p>
+
+    {% if all_appointments %}
+    <table class="table">
+        <thead class="thead-dark">
+        </thead>
+        {% for appointment in all_appointments %}
+        <tbody>
+
+          <tr class = "table-secondary">
+            <td><a href = ""> {{ appointment.patient.name }} </a></td>
+          </tr>
+
+        </tbody>
+        {% endfor %}
+    </table>
+    {% endif %}
+  </article>
+  <aside class="aside aside-1">
+    {% for doctor1, doctor2, doctor in doctor_name %}
+
+              <a href=""> {{ doctor}}</a>
+            </br>
+
+    {% endfor %}
+  </aside>
+
+  <footer class="footer">Footer</footer>
+</div>
+
+
+{% endblock %}

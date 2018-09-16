@@ -28,12 +28,16 @@
     {% endif %}
   </article>
   <aside class="aside aside-1">
-    {% for doctor1, doctor2, doctor in doctor_name %}
-
-              <a href=""> {{ doctor}}</a>
-            </br>
+    <form>
+    {% for first_name, last_name, id, selected in doctor_name %}
+        <ls> {{first_name}} {{last_name}}</a>
+        <input type="checkbox" name={{first_name}} value={{selected}} id={{id}}>
+          <label for="{{first_name}}">
+          </label>
+          </br>
 
     {% endfor %}
+    </form>
   </aside>
 
   <footer class="footer">Footer</footer>

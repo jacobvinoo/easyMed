@@ -14,9 +14,3 @@ def homeunimed(request):
     response_html = '<br>'.join(appointments_list)
 
     return HttpResponse(response_html)
-
-
-def login_context():
-    login_practice = "Unimed" # Change - get practice from the list selected
-    login_doctors = User.objects.exclude(pk=1).values_list('last_name', 'first_name').filter(doctor__isnull=False).filter(practice=login_practice)
-    return login_doctors

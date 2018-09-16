@@ -26,7 +26,7 @@ class Doctor(models.Model):
 
     def get_list_doctors(self):
         all_doctors = User.objects.exclude(pk=1).filter(doctor__isnull=False)
-        all_doctors_names = all_doctors.values_list('first_name', 'last_name', 'id', 'selected')
+        all_doctors_names = all_doctors.values_list('first_name', 'last_name', 'id')
         return all_doctors_names
 
 class Patient(models.Model):

@@ -19,7 +19,7 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, ('You Have Been Logged In!'))
+            #messages.success(request, ('You Have Been Logged In!'))
 
             doctors = Doctor()
             doctor_list = doctors.get_list_doctors()
@@ -28,7 +28,7 @@ def login_user(request):
             print(context)
 
             return render(request, 'homeunimed.html', context)
-            
+
         else:
             messages.success(request, ('Error Logging in - Please Try Again!'))
             return redirect('login')

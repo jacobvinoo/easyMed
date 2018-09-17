@@ -43,3 +43,7 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, related_name='appointment',on_delete=models.DO_NOTHING)
     practice = models.ForeignKey(Practice, related_name='appointment',on_delete=models.DO_NOTHING)
     patient = models.ForeignKey(Patient, related_name='appointment',on_delete=models.DO_NOTHING)
+
+    def get_appointments(self):
+        appointment_list = Appointment.objects.all()
+        return appointments_list

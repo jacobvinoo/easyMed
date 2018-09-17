@@ -5,43 +5,51 @@
 {% block title %}Appointments{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/container.css' %}">
-<div class="wrapper">
-  <header class="header">Header</header>
-  <article class="main">
-    <p> This is the Unimed home page</p>
+<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 
-    {% if all_appointments %}
-    <table class="table">
-        <thead class="thead-dark">
-        </thead>
-        {% for appointment in all_appointments %}
-        <tbody>
-
-          <tr class = "table-secondary">
-            <td><a href = ""> {{ appointment.patient.name }} </a></td>
-          </tr>
-
-        </tbody>
-        {% endfor %}
-    </table>
-    {% endif %}
-  </article>
-  <aside class="aside aside-1">
+<div class="container-fluid">
+  <div class="row content">
+    <div class="col-sm-3 sidenav">
+    <h3>Doctors</h3>
     <form>
-    {% for first_name, last_name, id, selected in doctor_name %}
-        <ls> {{first_name}} {{last_name}}</a>
-        <input type="checkbox" name={{first_name}} value={{selected}} id={{id}}>
-          <label for="{{first_name}}">
-          </label>
-          </br>
-
+    {% for first_name, last_name, id in doctor_name %}
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="{{id}}" checked="">
+          <label class="custom-control-label" for="customCheck1"><h6> {{first_name}} {{last_name}}</h6></label>
+        </div>
+        </br>
     {% endfor %}
     </form>
-  </aside>
+    </div>
 
-  <footer class="footer">Footer</footer>
+
+
+    <div class="col-sm-9">
+
+        <h3> Appointments</h3>
+
+        {% include 'appointments.html' %}
+
+        {% if all_appointments %}
+        <table class="table">
+            <thead class="thead-dark">
+            </thead>
+            {% for appointment in all_appointments %}
+            <tbody>
+
+              <tr class = "table-secondary">
+                <td><a href = ""> {{ appointment.patient.name }} </a></td>
+              </tr>
+
+            </tbody>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+    </div>
+  </div>
 </div>
+
 
 
 {% endblock %}

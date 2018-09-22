@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.manager import Manager
-
+from datetime import date
 
 
 # Create your models here.
@@ -24,8 +24,9 @@ class Doctor(models.Model):
     def __str__(self):
         return self.specialisation
 
-    def get_list_doctors(self):
-        all_doctors = User.objects.exclude(pk=1).filter(doctor__isnull=False)
+    @staticmethod
+    def get_list_doctors():
+        all_doctors = User.objects.exclude(is_superuser=True).filter(doctor__isnull=False)
         all_doctors_names = all_doctors.values_list('first_name', 'last_name', 'id')
         return all_doctors_names
 
@@ -43,7 +44,19 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, related_name='appointment',on_delete=models.DO_NOTHING)
     practice = models.ForeignKey(Practice, related_name='appointment',on_delete=models.DO_NOTHING)
     patient = models.ForeignKey(Patient, related_name='appointment',on_delete=models.DO_NOTHING)
+    slots = ['8:00 AM']
 
-    def get_appointments(self):
-        appointment_list = Appointment.objects.all()
-        return appointments_list
+    #@staticmethod
+    #def filter_by_date(date):
+    #    return Appointment.filter(start_time__year=date.year,
+    #                      start_time__month=date.month,
+    #                      start_time__day=date.day)
+
+    @staticmethod
+    def get_appointments(doctor, date_selected):
+        #doctor_id = doctor_id
+        #date_selected = date_selected
+        appointment_list = Appointment.objects.filter(start_time__year=date_selected.year,
+                               start_time__month=date_selected.month,
+                               start_time__day=date_selected.day).filter(doctor.)
+        return appointment_list

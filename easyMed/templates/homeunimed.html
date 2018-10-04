@@ -5,6 +5,8 @@
 {% block title %}Appointments{% endblock %}
 
 {% block content %}
+
+
 <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 
 <div class="container-fluid">
@@ -12,13 +14,15 @@
     <div class="col-sm-3 sidenav">
     <h3>Doctors</h3>
     <form>
-    {% for first_name, last_name, id in doctor_name %}
+
+      {% for item in doctor_list %}
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="{{id}}" checked="">
-          <label class="custom-control-label" for="customCheck1"><h6> {{first_name}} {{last_name}}</h6></label>
+          <label class="custom-control-label" for="customCheck1"><h6> {{item.first_name}} {{item.last_name}}</h6></label>
         </div>
         </br>
-    {% endfor %}
+      {% endfor %}
+
     </form>
     </div>
 
@@ -28,23 +32,36 @@
 
         <h3> Appointments</h3>
 
-        {% include 'appointments.html' %}
+      <!--  {% include 'appointments.html' %} -->
 
-        {% if all_appointments %}
-        <table class="table">
-            <thead class="thead-dark">
-            </thead>
-            {% for appointment in all_appointments %}
-            <tbody>
 
-              <tr class = "table-secondary">
-                <td><a href = ""> {{ appointment.patient.name }} </a></td>
-              </tr>
 
-            </tbody>
-            {% endfor %}
+        <table class="table table-hover">
+          <thead>
+            <tr class = "table-dark">
+              <th scope="col">Time Slot</th>
+              {% for doctor in doctor_list %}
+              <th scope="col">{{doctor.first_name}} {{doctor.last_name}}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr >
+              {% for slot in slots %}
+              <td>{{slot.time}}</td>
+              {% endfor %}
+              {% for appointment in appointment_list  %}
+              <td>{{appointment}}</td>
+              {% endfor %}
+            </tr>
+            <tr class="table-active">
+              <th scope="row">Active</th>
+              <td>Column content</td>
+              <td>Column content</td>
+            </tr>
+          </tbody>
         </table>
-        {% endif %}
+
 
     </div>
   </div>

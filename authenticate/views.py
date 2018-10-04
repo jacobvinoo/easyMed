@@ -6,7 +6,7 @@ from easyMed.models import Practice, Doctor, Patient, Appointment
 from django.template import Context, Template
 from django.db.models.functions import Concat
 from django.db.models import Value
-from datetime import date
+from datetime import date, datetime,timedelta
 from easyMed import views
 
 def home1(request):
@@ -22,24 +22,11 @@ def login_user(request):
             login(request, user)
             #messages.success(request, ('You Have Been Logged In!'))
 
-            appointment_context={}
 
-            doctor_list = Doctor.get_list_doctors()
 
-            #today_date = date.today()
-
-            today_date = date(2018,9,10)
-
-            for doctor in doctor_list:
-                #doctor_id = doctor.values('id')
-                appointments_list = Appointment.get_appointments(doctor, today_date)
-                context = {'doctor': doctor, 'appointment': appointments_list}
-                appointment_context.append(context)
-
-            #context = { 'doctor_name': doctor_list}
-            print(appointment_context)
-
-            return render(request, 'homeunimed.html', appointment_context)
+            context = Appointment.get_context()
+            #print(context)
+            return render(request, 'homeunimed.html', context)
 
         else:
             messages.success(request, ('Error Logging in - Please Try Again!'))

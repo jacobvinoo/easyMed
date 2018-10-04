@@ -2,8 +2,8 @@
   <thead>
     <tr class = "table-dark">
       <th scope="col">Time Slot</th>
-      {% for first_name, last_name, id in doctor_name %}
-      <th scope="col">{{first_name}} {{last_name}}</th>
+      {% for item in doctors_list %}
+      <th scope="col">{{item.first_name}} {{item.last_name}}</th>
       {% endfor %}
     </tr>
   </thead>
@@ -18,7 +18,7 @@
       <th scope="row">Active</th>
       <td>Column content</td>
       <td>Column content</td>
-      
+
     </tr>
   </tbody>
 </table>

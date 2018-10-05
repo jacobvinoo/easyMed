@@ -30,37 +30,60 @@
 
     <div class="col-sm-9">
 
-        <h3> Appointments</h3>
+        <h3> Appointments - {{date}}</h3>
 
       <!--  {% include 'appointments.html' %} -->
 
 
-
+      <table>
+      <tr>
+      <td>
         <table class="table table-hover">
           <thead>
             <tr class = "table-dark">
               <th scope="col">Time Slot</th>
-              {% for doctor in doctor_list %}
-              <th scope="col">{{doctor.first_name}} {{doctor.last_name}}</th>
-              {% endfor %}
             </tr>
           </thead>
           <tbody>
-            <tr >
-              {% for slot in slots %}
-              <td>{{slot.time}}</td>
-              {% endfor %}
-              {% for appointment in appointment_list  %}
-              <td>{{appointment}}</td>
-              {% endfor %}
+            {% for slot in slots %}
+            <tr>
+              <td>{{slot}}</td>
             </tr>
-            <tr class="table-active">
-              <th scope="row">Active</th>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
+            {% endfor %}
           </tbody>
         </table>
+      </td>
+
+
+        {% for doctor in doctor_list %}
+        <td>
+        <table class="table table-hover">
+          <thead>
+            <tr class = "table-dark">
+              <th scope="col">{{doctor.first_name}} {{doctor.last_name}}
+              </th>
+          </thead>
+
+          <tbody>
+          {% for appointment in appointment_list %}
+            <tr>
+              {% if appointment == "Empty" %}
+                <td> Empty </td>
+              {% else %}
+                {% for first_name, last_name in patient %}
+                <td>{{ first_name }} {{last_name}}</td>
+                {% endfor %}
+              {% endif %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        </td>
+        {% endfor %}
+
+    </td>
+    </tr>
+    </table>
 
 
     </div>

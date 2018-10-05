@@ -93,7 +93,7 @@ class Appointment(models.Model):
         return slots
 
     @staticmethod
-    def check_slot_appointment(doctor_id, date_selected, slot_time):
+    def get_slot_appointment(doctor_id, date_selected, slot_time):
         app_data={}
         #print(doctor_id)
         #print(date_selected)
@@ -102,14 +102,17 @@ class Appointment(models.Model):
                                start_time__month=date_selected.month,
                                start_time__day=date_selected.day).filter(doctor=doctor_id).values('start_time', 'end_time', 'id')
         #print(appointment_detail)
-        for appt in appointment_detail:
-            #print(appt['start_time'])
-            #print(slot_time)
-            #print(slot_time.replace(tzinfo=None) == appt['start_time'].replace(tzinfo=None))
-            if slot_time.replace(tzinfo=None) == appt['start_time'].replace(tzinfo=None):
-                app_data= User.objects.filter(id=appt['id']).values_list('first_name', 'last_name')
-            else:
-                app_data=""
+        if appointment_detail:
+            for appt in appointment_detail:
+                #print(appt['start_time'])
+                #print(slot_time)
+                #print(slot_time.replace(tzinfo=None) == appt['start_time'].replace(tzinfo=None))
+                if slot_time.replace(tzinfo=None) == appt['start_time'].replace(tzinfo=None):
+                    app_data= User.objects.filter(id=appt['id']).values('first_name', 'last_name')
+                else:
+                    app_data="Empty"
+        else:
+            app_data="Empty"
             #print(app_data)
         return app_data
 
@@ -118,23 +121,28 @@ class Appointment(models.Model):
         context={}
         app_data_doctor=[]
         app_data=[]
+        all_data_doctor=[]
         doctor_list = Doctor.get_list_doctors()
         slots = Appointment.create_daily_slots()
         today_date = date(2018,9,22)
-        for slot in slots:
-            for doctor in doctor_list:
+
+        for doctor in doctor_list:
+            for slot in slots:
                 doctor_id = doctor['id']
+
                 #time_slot = slot.time
-                app_data= Appointment.check_slot_appointment(doctor_id,today_date, slot)
-                #print(app_data)
+                app_data= Appointment.get_slot_appointment(doctor_id,today_date, slot)
+                print(doctor_id)
+                print(app_data)
                 app_data_doctor.append(app_data)
-        #print(app_data_doctor)
+
+        print(app_data_doctor)
 
         context['date']=today_date
         context['doctor_list']=doctor_list
-        context['appointment_list']= app_data_doctor
+        context['appointment_list']= all_data_doctor
         context['slots'] = slots
-        print(context)
+        #print(context)
         return(context)
 
     @staticmethod

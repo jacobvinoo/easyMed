@@ -136,7 +136,33 @@ class Appointment(models.Model):
         context['slots'] = slots
         print(context)
         return(context)
+    
+    @staticmethod
+    def get_context1():
+        context={}
+        app_data_doctor=[]
+        app_data=[]
+        doctor_list = Doctor.get_list_doctors()
+        slots = Appointment.create_daily_slots()
+        today_date = date(2018,9,22)
+        for slot in slots:
+            for doctor in doctor_list:
+                doctor_id = doctor['id']
+                doctor_name = str(doctor_id)
+                #time_slot = slot.time
+                app_data= Appointment.check_slot_appointment(doctor_id,today_date, slot)
+                #print(app_data)
+                app_data_doctor[doctor_name].append(app_data)
+        #print(app_data_doctor)
 
+        context['date']=today_date
+        context['doctor_list']=doctor_list
+        context['appointment_list']= app_data_doctor
+        context['slots'] = slots
+        print(context)
+        return(context)
+    
+    
     @staticmethod
     def get_appointment_context():
         data=[]

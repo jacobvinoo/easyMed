@@ -110,9 +110,9 @@ class Appointment(models.Model):
                 if slot_time.replace(tzinfo=None) == appt['start_time'].replace(tzinfo=None):
                     app_data= User.objects.filter(id=appt['id']).values('first_name', 'last_name')
                 else:
-                    app_data="Empty"
+                    app_data=""
         else:
-            app_data="Empty"
+            app_data=""
             #print(app_data)
         return app_data
 
@@ -121,7 +121,7 @@ class Appointment(models.Model):
         context={}
         app_data_doctor=[]
         app_data=[]
-        all_data_doctor=[]
+
         doctor_list = Doctor.get_list_doctors()
         slots = Appointment.create_daily_slots()
         today_date = date(2018,9,22)
@@ -140,8 +140,9 @@ class Appointment(models.Model):
 
         context['date']=today_date
         context['doctor_list']=doctor_list
-        context['appointment_list']= all_data_doctor
+        context['appointment_list']= app_data_doctor
         context['slots'] = slots
+        context['no_of_slots'] = count(slots)
         #print(context)
         return(context)
 
@@ -170,7 +171,7 @@ class Appointment(models.Model):
                         else:
                             app_data[doctor_id]= ""
                 else:
-                    app_data[doctor_id]="Empty"
+                    app_data[doctor_id]=""
             data.append(app_data)
         print(data)
             #context = { 'doctor_name': doctor_list}

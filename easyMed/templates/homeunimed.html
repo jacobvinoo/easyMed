@@ -65,14 +65,14 @@
           </thead>
 
           <tbody>
-          {% for appointment in appointment_list %}
+          {% for appt in appointment_list %}
             <tr>
-              {% if appointment == "Empty" %}
-                <td> Empty </td>
-              {% else %}
-                {% for first_name, last_name in patient %}
-                <td>{{ first_name }} {{last_name}}</td>
+              {% if appt %}
+                {% for item in appt %}
+                <td>{{ item.first_name }} {{ item.last_name }}</td>
                 {% endfor %}
+              {% else %}
+                <td> Empty </td>
               {% endif %}
             </tr>
           {% endfor %}

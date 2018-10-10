@@ -56,6 +56,7 @@
 
 
         {% for doctor in doctor_list %}
+
         <td>
         <table class="table table-hover">
           <thead>
@@ -65,17 +66,15 @@
           </thead>
 
           <tbody>
-          {% for appt in appointment_list %}
-            <tr>
-              {% if appt %}
-                {% for item in appt %}
-                <td>{{ item.first_name }} {{ item.last_name }}</td>
-                {% endfor %}
-              {% else %}
-                <td> Empty </td>
-              {% endif %}
-            </tr>
-          {% endfor %}
+               {% for appt in appointment_list %}
+                <tr>
+                  {% for item in appt %}
+                      <td>{{ item.first_name }} {{ item.last_name }}</td>
+                  {% empty %}
+                    <td> Empty </td>
+                  {% endfor %}
+                </tr>
+               {% endfor %}
           </tbody>
         </table>
         </td>

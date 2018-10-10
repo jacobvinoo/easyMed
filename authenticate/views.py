@@ -24,7 +24,7 @@ def login_user(request):
 
 
 
-            context = Appointment.get_context()
+            context = Appointment.get_context_new()
             #print(context)
             return render(request, 'homeunimed.html', context)
 

@@ -136,15 +136,60 @@ class Appointment(models.Model):
                 print(app_data)
                 app_data_doctor.append(app_data)
 
-        print(app_data_doctor)
+        #print(app_data_doctor)
 
         context['date']=today_date
         context['doctor_list']=doctor_list
         context['appointment_list']= app_data_doctor
         context['slots'] = slots
-        context['no_of_slots'] = count(slots)
-        #print(context)
+        context['no_of_slots'] = len(slots)
+        context['no_of_doctors'] = len(doctor_list)
+        print(context)
         return(context)
+
+    @staticmethod
+    def get_context_new():
+        doctor_list = Doctor.get_list_doctors()
+
+        num_lists = int(doctor_list.count())
+        apptlists = []
+        for p in range(num_lists):
+            apptlists.append([])
+
+        i=0
+
+        context={}
+        app_data_doctor=[]
+        app_data=[]
+
+        slots = Appointment.create_daily_slots()
+        today_date = date(2018,9,22)
+        context_appointment = slots
+        for doctor in doctor_list:
+
+            for slot in slots:
+                doctor_id = doctor['id']
+                #time_slot = slot.time
+                app_data= Appointment.get_slot_appointment(doctor_id,today_date, slot)
+                #print(app_data)
+                apptlists[i].append(app_data)
+        #print(app_data_doctor)
+            i=i+1
+        context_appointment.append(apptlists)
+        context['date']=today_date
+        context['doctor_list']=doctor_list
+        context['appointment_list']= apptlists
+        context['slots'] = slots
+        context['number'] = num_lists
+        context['no_of_slots'] = len(slots)
+
+        #context_appt =  list(map(list, zip(*context_appointment)))
+        print(context)
+        return(context)
+
+
+
+
 
     @staticmethod
     def get_appointment_context():

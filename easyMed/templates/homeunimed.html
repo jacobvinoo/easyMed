@@ -66,15 +66,19 @@
           </thead>
 
           <tbody>
-               {% for appt in appointment_list %}
+
                 <tr>
-                  {% for item in appt %}
-                      <td>{{ item.first_name }} {{ item.last_name }}</td>
-                  {% empty %}
-                    <td> Empty </td>
-                  {% endfor %}
+                      {% for item in appointment_list.forloopcounter0 %}
+                       {% for i in item %}
+                        {% if i %}
+                          <td>{{ i.first_name }} {{ i.last_name }}</td>
+                        {% else %}
+                          <td> Empty </td>
+                        {% endif %}
+                      {% endfor %}
+                      {% endfor %}
                 </tr>
-               {% endfor %}
+
           </tbody>
         </table>
         </td>

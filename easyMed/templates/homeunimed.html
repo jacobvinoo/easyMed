@@ -35,58 +35,27 @@
       <!--  {% include 'appointments.html' %} -->
 
 
-      <table>
-      <tr>
-      <td>
-        <table class="table table-hover">
-          <thead>
-            <tr class = "table-dark">
-              <th scope="col">Time Slot</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for slot in slots %}
-            <tr>
-              <td>{{slot}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </td>
 
+    <table class="table table-hover">
+      <thead>
+        <tr class = "table-dark">
+          <th scope="col">Time Slot</th>
+          {% for doctor in doctor_list %}
+          <th scope="col">{{doctor.first_name}} {{doctor.last_name}}</th>
+          {% endfor %}
+        </tr>
+        <tbody>
+        {% for item_row in appointment_list %}
+          <tr>
 
-        {% for doctor in doctor_list %}
-
-        <td>
-        <table class="table table-hover">
-          <thead>
-            <tr class = "table-dark">
-              <th scope="col">{{doctor.first_name}} {{doctor.last_name}}
-              </th>
-          </thead>
-
-          <tbody>
-
-                <tr>
-                      {% for item in appointment_list.forloopcounter0 %}
-                       {% for i in item %}
-                        {% if i %}
-                          <td>{{ i.first_name }} {{ i.last_name }}</td>
-                        {% else %}
-                          <td> Empty </td>
-                        {% endif %}
-                      {% endfor %}
-                      {% endfor %}
-                </tr>
-
-          </tbody>
-        </table>
-        </td>
+              {% for item in item_row %}
+                <td> {{item}} </td>
+              {% endfor %}
         {% endfor %}
+          </tr>
 
-    </td>
-    </tr>
-    </table>
+          </tbody>
+        </table>
 
 
     </div>

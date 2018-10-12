@@ -148,43 +148,78 @@ class Appointment(models.Model):
         return(context)
 
     @staticmethod
+    def make_table(doctor_list, slots, appointment_list, doctor_numbers, slot_numbers):
+        #METHOD TO CREATE A TABLE WITH ROWS AS SLOT, DOCTOR1 APPOINTMENT, DOCTOR2 APPT ETC.
+        appt_list = []
+        #header = ["Slot"]
+        #data=[]
+        #slots =slots
+        #appointment_list = self.appointment_list
+        #slot_numbers = self.slot_numbers
+        #print(appointment_list)
+        # GET DOCTOR FULL NAME AND ADD TO HEADER
+        #doctors_all_list=[]
+        #for doctor in doctor_list:
+            #for item in doctor:
+                #print(doctor['first_name']+" "+doctor['last_name'])
+                #header.append(doctor['first_name']+" "+doctor['last_name'])
+        #appt_list.append(header)
+        #POPULATE REST OF TABLE WTIH SLOT AND PATIENT FULL NAME
+
+        for i in range(0,slot_numbers):
+            data=[]
+            data.append(slots[i])
+            for j in range(0,doctor_numbers):
+                if appointment_list[j][i]:
+                    print(j,i)
+                    #print(appointment_list[j][i][0]['first_name'])
+                    data.append(appointment_list[j][i][0]['first_name'] + " " + appointment_list[j][i][0]['last_name'])
+                else:
+                    print(j,i)
+                    data.append("Empty")
+            appt_list.append(data)
+
+        print(appt_list)
+        return appt_list
+
+    @staticmethod
     def get_context_new():
         doctor_list = Doctor.get_list_doctors()
 
         num_lists = int(doctor_list.count())
         apptlists = []
-        for p in range(num_lists):
-            apptlists.append([])
+        #for p in range(num_lists):
+        #    apptlists.append([])
 
-        i=0
+        #i=0
 
         context={}
-        app_data_doctor=[]
-        app_data=[]
+        #app_data_doctor=[]
+        #app_data=[]
 
         slots = Appointment.create_daily_slots()
         today_date = date(2018,9,22)
-        context_appointment = slots
+        context_appointment = []
         for doctor in doctor_list:
-
+            apptlists=[]
             for slot in slots:
                 doctor_id = doctor['id']
-                #time_slot = slot.time
+                time_slot = slot.time
                 app_data= Appointment.get_slot_appointment(doctor_id,today_date, slot)
                 #print(app_data)
-                apptlists[i].append(app_data)
-        #print(app_data_doctor)
-            i=i+1
-        context_appointment.append(apptlists)
+                apptlists.append(app_data)
+            context_appointment.append(apptlists)
+
+        no_of_slots = len(slots)
         context['date']=today_date
         context['doctor_list']=doctor_list
-        context['appointment_list']= apptlists
-        context['slots'] = slots
-        context['number'] = num_lists
-        context['no_of_slots'] = len(slots)
+        context['appointment_list']= Appointment.make_table(doctor_list, slots, context_appointment,  num_lists, no_of_slots)
+        #context['slots'] = slots
+        #context['number'] = num_lists
+
 
         #context_appt =  list(map(list, zip(*context_appointment)))
-        print(context)
+        #print(context)
         return(context)
 
 

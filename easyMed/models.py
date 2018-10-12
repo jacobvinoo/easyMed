@@ -66,6 +66,7 @@ class Appointment(models.Model):
     def get_daily_slots(start, end, slot, date):
          # combine start time to respective day
         dt = datetime.combine(date, datetime.strptime(start,"%H:%M").time())
+
         slots = [dt]
         # increment current time by slot till the end time
         while (dt.time() < datetime.strptime(end,"%H:%M").time()):

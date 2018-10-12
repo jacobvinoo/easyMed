@@ -30,35 +30,29 @@
 
     <div class="col-sm-9">
 
-        <h3> Appointments</h3>
+        <h3> Appointments - {{date}}</h3>
 
       <!--  {% include 'appointments.html' %} -->
 
 
 
-        <table class="table table-hover">
-          <thead>
-            <tr class = "table-dark">
-              <th scope="col">Time Slot</th>
-              {% for doctor in doctor_list %}
-              <th scope="col">{{doctor.first_name}} {{doctor.last_name}}</th>
+    <table class="table table-hover">
+      <thead>
+        <tr class = "table-dark">
+          <th scope="col">Time Slot</th>
+          {% for doctor in doctor_list %}
+          <th scope="col">{{doctor.first_name}} {{doctor.last_name}}</th>
+          {% endfor %}
+        </tr>
+        <tbody>
+        {% for item_row in appointment_list %}
+          <tr>
+              {% for item in item_row %}
+                <td> {{item}} </td>
               {% endfor %}
-            </tr>
-          </thead>
-          <tbody>
-            <tr >
-              {% for slot in slots %}
-              <td>{{slot.time}}</td>
-              {% endfor %}
-              {% for appointment in appointment_list  %}
-              <td>{{appointment}}</td>
-              {% endfor %}
-            </tr>
-            <tr class="table-active">
-              <th scope="row">Active</th>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
+        {% endfor %}
+          </tr>
+
           </tbody>
         </table>
 

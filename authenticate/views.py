@@ -25,7 +25,7 @@ def login_user(request):
 
 
             context = Appointment.get_context_new()
-            #print(context)
+            #print("Using Authenticate views")
             return render(request, 'homeunimed.html', context)
 
         else:
@@ -34,3 +34,17 @@ def login_user(request):
 
     else:
         return render(request, 'login.html', {})
+
+def update(request):
+    if request.method == 'POST':
+        doctor_id = request.POST['id']
+        print(id)
+        selected = request.POST['selected']
+        print(selected)
+        doctor = Doctor.objects.get(pk=doctor_id)
+        print(doctor)
+        doctor.selected = selected
+        doctor.save()
+        
+        context = Appointment.get_context_new()
+        return render(request, 'homeunimed.html', context)

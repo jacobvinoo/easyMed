@@ -17,8 +17,13 @@
 
       {% for item in doctor_list %}
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="{{id}}" checked="">
-          <label class="custom-control-label" for="customCheck1"><h6> {{item.first_name}} {{item.last_name}}</h6></label>
+          {% if }
+          <input type="checkbox" class="custom-control-input" name="doctor_list" id="{{item.id}}" checked="">
+          <label class="custom-control-label" for="{{item.id}}"><h6> {{item.first_name}} {{item.last_name}}</h6>
+          {% else %}
+          
+          {% endif %}    
+          </label>
         </div>
         </br>
       {% endfor %}
@@ -41,7 +46,7 @@
       <thead>
         <tr class = "table-dark">
           <th scope="col">Time Slot</th>
-          {% for doctor in doctor_list %}
+          {% for doctor in selected_doctor_list %}
           <th scope="col">{{doctor.first_name}} {{doctor.last_name}}</th>
           {% endfor %}
         </tr>

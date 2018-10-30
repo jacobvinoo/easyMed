@@ -23,13 +23,22 @@ class Doctor(models.Model):
     selected = models.BooleanField()
 
     def __str__(self):
-        return self.specialisation
+        return (self.specialisation+" "+str(self.selected))
 
     @staticmethod
     def get_list_doctors():
         all_doctors = User.objects.exclude(is_superuser=True).filter(doctor__isnull=False)
         all_doctors_names = all_doctors.values('first_name', 'last_name', 'id')
         return all_doctors_names
+    
+    @staticmethod
+    def get_selected_doctors():
+        all_selected_doctors = User.objects.exclude(is_superuser=True).filter(doctor__isnull=False)
+        print(all_selected_doctors)
+        selected_doctor_pks = Doctor.objects.filter(selected=True).values('pk')
+        all_selected_doctors_names = all_selected_doctors.filter(pk__in=selected_doctor_pks).values('first_name', 'last_name', 'id')
+        print(all_selected_doctors_names)
+        return all_selected_doctors_names
 
 class Patient(models.Model):
     name = models.ForeignKey(User, related_name='patient', on_delete=models.DO_NOTHING)
@@ -52,7 +61,8 @@ class Appointment(models.Model):
     #    return Appointment.filter(start_time__year=date.year,
     #                      start_time__month=date.month,
     #                      start_time__day=date.day)
-
+    
+    #NOT USED - INITIAL IMPLEMENTATION OF APPOINTMENTS FOR A DOCTOR 
     @staticmethod
     def get_appointments(doctor_id, date_selected):
         #doctor_id = doctor_id
@@ -61,7 +71,8 @@ class Appointment(models.Model):
                                start_time__month=date_selected.month,
                                start_time__day=date_selected.day).filter(doctor=doctor_id).values('start_time', 'end_time', 'patient')
         return appointment_list
-
+    
+    #SUPPORT METHOD TO CREATE SLOTS
     @staticmethod
     def get_daily_slots(start, end, slot, date):
          # combine start time to respective day
@@ -72,7 +83,8 @@ class Appointment(models.Model):
             dt = dt + timedelta(minutes=slot)
             slots.append(dt)
         return slots
-
+    
+    #METHOD TO CREATE SLOTS - MOVE TO ADMIN LATER AS AN ADMINSTRATIVE FUNCTION. MAY NEED TO MAKE IT SPECIFIC TO EACH DOCTOR
     @staticmethod
     def create_daily_slots():
         #Timeslot definition
@@ -91,7 +103,8 @@ class Appointment(models.Model):
             #print(slots)
 
         return slots
-
+    
+    #METHOD TO FIND PATIENT NAME IF DOCTOR HAS AN APPOINTMENT FOR THE GIVEN SLOT
     @staticmethod
     def get_slot_appointment(doctor_id, date_selected, slot_time):
         app_data={}
@@ -115,14 +128,16 @@ class Appointment(models.Model):
             app_data=""
             #print(app_data)
         return app_data
-
+    
+    # NOT USED
     @staticmethod
     def get_context():
         context={}
         app_data_doctor=[]
         app_data=[]
 
-        doctor_list = Doctor.get_list_doctors()
+        doctor_list = Doctor.get_selected_doctors
+        print(doctor_list)
         slots = Appointment.create_daily_slots()
         today_date = date(2018,9,22)
 
@@ -132,8 +147,8 @@ class Appointment(models.Model):
 
                 #time_slot = slot.time
                 app_data= Appointment.get_slot_appointment(doctor_id,today_date, slot)
-                print(doctor_id)
-                print(app_data)
+                #print(doctor_id)
+                #print(app_data)
                 app_data_doctor.append(app_data)
 
         #print(app_data_doctor)
@@ -163,19 +178,20 @@ class Appointment(models.Model):
                     #print(appointment_list[j][i][0]['first_name'])
                     data.append(appointment_list[j][i][0]['first_name'] + " " + appointment_list[j][i][0]['last_name'])
                 else:
-                    print(j,i)
+                    #print(j,i)
                     data.append("")
             appt_list.append(data)
 
-        print(appt_list)
+        #print(appt_list)
         return appt_list
 
     #CREATES CONTEXT FOR THE TEMPLATE
     @staticmethod
     def get_context_new():
         doctor_list = Doctor.get_list_doctors()
-
-        num_lists = int(doctor_list.count())
+        selected_doctor_list = Doctor.get_selected_doctors()
+        
+        num_lists = int(selected_doctor_list.count())
         apptlists = []
 
         context={}
@@ -183,7 +199,7 @@ class Appointment(models.Model):
         slots = Appointment.create_daily_slots()
         today_date = date(2018,9,22)
         context_appointment = []
-        for doctor in doctor_list:
+        for doctor in selected_doctor_list:
             apptlists=[]
             for slot in slots:
                 doctor_id = doctor['id']
@@ -196,6 +212,7 @@ class Appointment(models.Model):
         no_of_slots = len(slots)
         context['date']=today_date
         context['doctor_list']=doctor_list
-        context['appointment_list']= Appointment.make_table(doctor_list, slots, context_appointment,  num_lists, no_of_slots)
+        context['selected_doctor_list'] = selected_doctor_list
+        context['appointment_list']= Appointment.make_table(selected_doctor_list, slots, context_appointment,  num_lists, no_of_slots)
 
         return(context)

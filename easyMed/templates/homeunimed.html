@@ -17,11 +17,12 @@
 
       {% for item in doctor_list %}
         <div class="custom-control custom-checkbox">
-          {% if }
-          <input type="checkbox" class="custom-control-input" name="doctor_list" id="{{item.id}}" checked="">
+          {% if item.selected %}
+          <input type="checkbox" class="custom-control-input" name="doctor_list" id="{{item.id}}" checked="checked">
           <label class="custom-control-label" for="{{item.id}}"><h6> {{item.first_name}} {{item.last_name}}</h6>
           {% else %}
-          
+          <input type="checkbox" class="custom-control-input" name="doctor_list" id="{{item.id}}" checked="">
+          <label class="custom-control-label" for="{{item.id}}"><h6> {{item.first_name}} {{item.last_name}}</h6>
           {% endif %}    
           </label>
         </div>

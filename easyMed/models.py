@@ -28,15 +28,15 @@ class Doctor(models.Model):
     @staticmethod
     def get_list_doctors():
         all_doctors = User.objects.exclude(is_superuser=True).filter(doctor__isnull=False)
-        all_doctors_names = all_doctors.values('first_name', 'last_name', 'id')
+        all_doctors_names = all_doctors.values('first_name', 'last_name', 'id','doctor__selected')
         return all_doctors_names
     
     @staticmethod
     def get_selected_doctors():
         all_selected_doctors = User.objects.exclude(is_superuser=True).filter(doctor__isnull=False)
         print(all_selected_doctors)
-        selected_doctor_pks = Doctor.objects.filter(selected=True).values('pk')
-        all_selected_doctors_names = all_selected_doctors.filter(pk__in=selected_doctor_pks).values('first_name', 'last_name', 'id')
+        #selected_doctor_pks = Doctor.objects.filter(selected=True).values('pk')
+        all_selected_doctors_names = all_selected_doctors.filter(doctor__selected=True).values('first_name', 'last_name', 'id', 'doctor__selected')
         print(all_selected_doctors_names)
         return all_selected_doctors_names
 

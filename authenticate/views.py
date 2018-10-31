@@ -41,7 +41,7 @@ def update(request):
         print(id)
         selected = request.POST['selected']
         print(selected)
-        doctor = Doctor.objects.get(pk=doctor_id)
+        doctor = Doctor.objects.filter(pk=doctor_id).first()
         print(doctor)
         doctor.selected = selected
         doctor.save()

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -41,10 +42,13 @@ def update(request):
         print(id)
         selected = request.POST['selected']
         print(selected)
-        doctor = Doctor.objects.filter(pk=doctor_id).first()
+        doctor = Doctor.objects.get(pk=doctor_id)
         print(doctor)
         doctor.selected = selected
         doctor.save()
-        
+
         context = Appointment.get_context_new()
+        print(context)
         return render(request, 'homeunimed.html', context)
+
+        

@@ -1,3 +1,12 @@
+from django import forms
+from easyMed.models import Appointment
+
+class MakeAppointmentForm(forms.ModelForm):
+
+    class Meta:
+        model = Appointment
+        fields = ('doctor', 'patient', 'start_time',)
+
 <form>
   <fieldset>
     <legend>Legend</legend>

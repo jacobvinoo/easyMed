@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.manager import Manager
 from datetime import date,datetime,timedelta
 
+
 # Create your models here.
 #class DoctorManager(models.Manager):
 
@@ -187,7 +188,12 @@ class Appointment(models.Model):
 
     #CREATES CONTEXT FOR THE TEMPLATE
     @staticmethod
-    def get_context_new():
+    def get_context_new(*args):
+        if not args:
+            today_date = Appointment.currentdate()
+        else:
+            today_date = args[0]
+
         doctor_list = Doctor.get_list_doctors()
         selected_doctor_list = Doctor.get_selected_doctors()
 
@@ -197,7 +203,8 @@ class Appointment(models.Model):
         context={}
 
         slots = Appointment.create_daily_slots()
-        today_date = date(2018,9,22)
+
+        #today_date = date(2018,9,22)
         context_appointment = []
         for doctor in selected_doctor_list:
             apptlists=[]
@@ -216,3 +223,21 @@ class Appointment(models.Model):
         context['appointment_list']= Appointment.make_table(selected_doctor_list, slots, context_appointment,  num_lists, no_of_slots)
 
         return(context)
+
+
+    #Method to change the date when clicked forward or back button
+
+    @staticmethod
+    def currentdate(*args):
+        if not args:
+            selected_date = datetime.now() # picks today's date as default view
+        else:
+            currentdate = datetime.strptime(args[1], "%Y-%m-%d  %H:%M:%S.%f") #converts string to date format
+            print(currentdate)
+            if args[0] == "Forward":
+                selected_date = currentdate + timedelta(days=1) # increment day by one
+                print(selected_date)
+            elif args[0] == "Back":
+                selected_date = currentdate - timedelta(days=1) # reduce day by one
+
+        return selected_date

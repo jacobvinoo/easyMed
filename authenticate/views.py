@@ -36,19 +36,16 @@ def login_user(request):
     else:
         return render(request, 'login.html', {})
 
-def update(request):
-    if request.method == 'POST':
-        doctor_id = request.POST['id']
-        print(id)
-        selected = request.POST['selected']
-        print(selected)
-        doctor = Doctor.objects.get(pk=doctor_id)
-        print(doctor)
-        doctor.selected = selected
-        doctor.save()
+def forward(request, date):
+    #print(date)
+    date_selected = Appointment.currentdate("Forward", date) #get the date for the context
+    #print(date_selected)
+    context = Appointment.get_context_new(date_selected)
+    #print(context)
+    return render(request, 'homeunimed.html', context)
 
-        context = Appointment.get_context_new()
-        print(context)
-        return render(request, 'homeunimed.html', context)
-
-        
+def back(request, date):
+    date_selected = Appointment.currentdate("Back", date) # get the date for the context
+    context = Appointment.get_context_new(date_selected)
+    print(context)
+    return render(request, 'homeunimed.html', context)

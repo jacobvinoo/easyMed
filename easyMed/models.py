@@ -78,11 +78,12 @@ class Appointment(models.Model):
     def get_daily_slots(start, end, slot, date):
          # combine start time to respective day
         dt = datetime.combine(date, datetime.strptime(start,"%H:%M").time())
-        slots = [dt]
+        slots = [dt.time()]
         # increment current time by slot till the end time
         while (dt.time() < datetime.strptime(end,"%H:%M").time()):
             dt = dt + timedelta(minutes=slot)
-            slots.append(dt)
+            dtTime = dt.time()
+            slots.append(dtTime)
         return slots
 
     #METHOD TO CREATE SLOTS - MOVE TO ADMIN LATER AS AN ADMINSTRATIVE FUNCTION. MAY NEED TO MAKE IT SPECIFIC TO EACH DOCTOR
@@ -130,38 +131,7 @@ class Appointment(models.Model):
             #print(app_data)
         return app_data
 
-    # NOT USED
-    @staticmethod
-    def get_context():
-        context={}
-        app_data_doctor=[]
-        app_data=[]
 
-        doctor_list = Doctor.get_selected_doctors
-        #print(doctor_list)
-        slots = Appointment.create_daily_slots()
-        today_date = date(2018,9,22)
-
-        for doctor in doctor_list:
-            for slot in slots:
-                doctor_id = doctor['id']
-
-                #time_slot = slot.time
-                app_data= Appointment.get_slot_appointment(doctor_id,today_date, slot)
-                #print(doctor_id)
-                #print(app_data)
-                app_data_doctor.append(app_data)
-
-        #print(app_data_doctor)
-
-        context['date']=today_date
-        context['doctor_list']=doctor_list
-        context['appointment_list']= app_data_doctor
-        context['slots'] = slots
-        context['no_of_slots'] = len(slots)
-        context['no_of_doctors'] = len(doctor_list)
-        #print(context)
-        return(context)
 
     @staticmethod
     def make_table(doctor_list, slots, appointment_list, doctor_numbers, slot_numbers):
@@ -210,7 +180,7 @@ class Appointment(models.Model):
             apptlists=[]
             for slot in slots:
                 doctor_id = doctor['id']
-                time_slot = slot.time
+                time_slot = slot
                 app_data= Appointment.get_slot_appointment(doctor_id,today_date, slot)
                 #print(app_data)
                 apptlists.append(app_data)

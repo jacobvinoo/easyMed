@@ -22,17 +22,12 @@ def login_user(request):
         if user is not None:
             login(request, user)
             #messages.success(request, ('You Have Been Logged In!'))
-
-
-
             context = Appointment.get_context_new()
             #print("Using Authenticate views")
             return render(request, 'homeunimed.html', context)
-
         else:
             messages.success(request, ('Error Logging in - Please Try Again!'))
             return redirect('login')
-
     else:
         return render(request, 'login.html', {})
 

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'todo_list',
     'authenticate',
     'easyMed',
+    'appointment',
 ]
 
 MIDDLEWARE = [

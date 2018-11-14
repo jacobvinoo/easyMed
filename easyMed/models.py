@@ -119,10 +119,10 @@ class Appointment(models.Model):
         #print(appointment_detail)
         if appointment_detail:
             for appt in appointment_detail:
-                #print(appt['start_time'])
-                #print(slot_time)
-                #print(slot_time.replace(tzinfo=None) == appt['start_time'].replace(tzinfo=None))
-                if slot_time.replace(tzinfo=None) == appt['start_time'].replace(tzinfo=None):
+                print(appt['start_time'].time().replace(tzinfo=None))
+                print(slot_time)
+                print(slot_time.replace(tzinfo=None) == appt['start_time'].time().replace(tzinfo=None))
+                if slot_time.replace(tzinfo=None) == appt['start_time'].time().replace(tzinfo=None):
                     app_data= User.objects.filter(id=appt['id']).values('first_name', 'last_name')
                 else:
                     app_data=""

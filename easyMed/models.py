@@ -19,12 +19,13 @@ class Practice(models.Model):
 
 class Doctor(models.Model):
     specialisation = models.CharField(max_length=50)
-    practice = models.ForeignKey(Practice, related_name='doctor',on_delete=models.DO_NOTHING)
+    practice = models.ForeignKey(Practice, related_name='practice',on_delete=models.DO_NOTHING)
     name = models.ForeignKey(User, related_name ='doctor', on_delete=models.DO_NOTHING)
     selected = models.BooleanField()
 
     def __str__(self):
-        return (self.specialisation+" "+str(self.selected))
+        #return (self.specialisation+" "+str(self.selected))
+        return f"{self.name}"
 
     @staticmethod
     def get_list_doctors():

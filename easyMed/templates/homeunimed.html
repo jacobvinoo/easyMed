@@ -8,6 +8,7 @@
 
 
 <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
 <div class="container-fluid">
   <div class="row content">
@@ -16,9 +17,12 @@
     <form>
 
       {% for item in doctor_list %}
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="{{id}}" checked="">
-          <label class="custom-control-label" for="customCheck1"><h6> {{item.first_name}} {{item.last_name}}</h6></label>
+        <div class="custom-control custom-checkbox" id="groupCheckBox">
+
+          <input type="checkbox" class="custom-control-input" name="doctor_list" id="{{item.id}}" checked="checked">
+          <label class="custom-control-label" for="{{item.id}}"><h6> {{item.first_name}} {{item.last_name}}</h6>
+
+          </label>
         </div>
         </br>
       {% endfor %}
@@ -28,27 +32,47 @@
 
 
 
-    <div class="col-sm-9">
-
-        <h3> Appointments - {{date}}</h3>
-
+    <div class="col-sm-6">
+      <div align="center">
+        <div style="display: inline-block">
+          <a class="nav-link" href="{% url 'back' date %}">
+            <i class="fas fa-arrow-alt-circle-left fa-2x"></i></a>
+        </div>
+        <div style="display: inline-block">
+            <h3> Appointments - {{date|date:'N j, Y'}}</h3>
+        </div>
+        <div style="display: inline-block">
+          <a class="nav-link" href="{% url 'forward' date %}"><i class="fas fa-arrow-alt-circle-right fa-2x"></i></a>
+        </div>
+      </div>
       <!--  {% include 'appointments.html' %} -->
+      <a href = "{% url 'newappointment' %}"><button type="button" class="btn btn-success">
+        Book Appointment</button></a>
 
 
-
-    <table class="table table-hover">
+    <table class="table table-hover" id="doctorTable">
       <thead>
         <tr class = "table-dark">
           <th scope="col">Time Slot</th>
-          {% for doctor in doctor_list %}
-          <th scope="col">{{doctor.first_name}} {{doctor.last_name}}</th>
+          {% for doctor in selected_doctor_list %}
+          <th scope="col" name="doctor_list" id={{doctor.id}}>{{doctor.first_name}} {{doctor.last_name}}</th>
           {% endfor %}
         </tr>
         <tbody>
         {% for item_row in appointment_list %}
           <tr>
+
               {% for item in item_row %}
+               {% if item %}
                 <td> {{item}} </td>
+                {% else %}
+                <td>
+                  <a href="http://example.com">
+                    <p class="text-success">
+                    Book </p>
+                  </a>
+                </td>
+                {% endif %}
               {% endfor %}
         {% endfor %}
           </tr>

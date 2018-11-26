@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include ('authenticate.urls')),
     path('homeunimed', include('easyMed.urls')),
+    path('appointment', include('appointment.urls')),
     path('home', include('todo_list.urls')),
 
 ]

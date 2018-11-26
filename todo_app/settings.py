@@ -27,6 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1', 'nozkhg3d.apps.lair.io',]
 
+# If this project is in debug mode and running on SourceLair, then add
+# `localhost` and its Public URL in the allowed hosts.
+if DEBUG:
+    ALLOWED_HOSTS = ['*', '6c6onsbr.apps.lair.io',]
+
+
 
 # Application definition
 
@@ -41,6 +47,7 @@ INSTALLED_APPS = [
     'todo_list',
     'authenticate',
     'easyMed',
+    'appointment',
 ]
 
 MIDDLEWARE = [

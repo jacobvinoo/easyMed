@@ -137,7 +137,7 @@ class Appointment(models.Model):
     @staticmethod
     def make_table(doctor_list, slots, appointment_list, doctor_numbers, slot_numbers):
         #METHOD TO CREATE A TABLE WITH ROWS AS SLOT, DOCTOR1 APPOINTMENT, DOCTOR2 APPT ETC.
-        appt_list = []
+        appt_list = {}
 
         #POPULATE REST OF TABLE WTIH SLOT AND PATIENT FULL NAME
 
@@ -148,7 +148,7 @@ class Appointment(models.Model):
                 if appointment_list[j][i]:
                     #print(j,i)
                     #print(appointment_list[j][i][0]['first_name'])
-                    data.append(appointment_list[j][i][0]['first_name'] + " " + appointment_list[j][i][0]['last_name'])
+                    data.append(appointment_list[j][i][0]['appointment']['patientname']['first_name'] + " " + appointment_list[j][i][0]['appointment']['patientname']['last_name'])
                 else:
                     #print(j,i)
                     data.append("")
@@ -176,16 +176,18 @@ class Appointment(models.Model):
         slots = Appointment.create_daily_slots()
 
         #today_date = date(2018,9,22)
-        context_appointment = []
+        context_appointment = {}
         for doctor in selected_doctor_list:
-            apptlists=[]
+            apptlists={}
             for slot in slots:
                 doctor_id = doctor['id']
                 time_slot = slot
                 app_data= Appointment.get_slot_appointment(doctor_id,today_date, slot)
                 #print(app_data)
-                apptlists.append(app_data)
-            context_appointment.append(apptlists)
+                apptlists['patientname']=app_data
+                apptlists['slot']=slot
+            context_appointment['appointment']=apptlists
+            context_appontment['doctor']=doctor_id
 
         no_of_slots = len(slots)
         context['date']=today_date

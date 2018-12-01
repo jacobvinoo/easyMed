@@ -111,20 +111,24 @@ class Appointment(models.Model):
     @staticmethod
     def get_slot_appointment(doctor_id, date_selected, slot_time):
         app_data={}
-        #print(doctor_id)
-        #print(date_selected)
-        #print(slot_time)
+
+        #Filter all appointments for the day. <<ForImprovement>>Could be done more efficiently?
         appointment_detail = Appointment.objects.filter(start_time__year=date_selected.year,
                                start_time__month=date_selected.month,
                                start_time__day=date_selected.day).filter(doctor=doctor_id).values('start_time', 'end_time', 'id')
         #print(appointment_detail)
         if appointment_detail:
             for appt in appointment_detail:
-                print(appt['start_time'].time().replace(tzinfo=None))
-                print(slot_time)
-                print(slot_time.replace(tzinfo=None) == appt['start_time'].time().replace(tzinfo=None))
+                #print(appt['start_time'].time().replace(tzinfo=None))
+                #print(slot_time)
+                #print(slot_time.replace(tzinfo=None) == appt['start_time'].time().replace(tzinfo=None))
+                # Check for the slot that is passed get first name and lastname of the patient
                 if slot_time.replace(tzinfo=None) == appt['start_time'].time().replace(tzinfo=None):
-                    app_data= User.objects.filter(id=appt['id']).values('first_name', 'last_name')
+                    patient_name= User.objects.filter(id=appt['id']).values('first_name', 'last_name')
+                    app_data['patient_name']= patient_name[0]['first_name'] + " " + patient_name[0]['last_name']
+                    app_data['doctor_id']=doctor_id
+                    app_data['patient_id']=appt['id']
+                    app_data['slot']=slot_time
                 else:
                     app_data=""
         else:
@@ -146,9 +150,11 @@ class Appointment(models.Model):
             data.append(slots[i])
             for j in range(0,doctor_numbers):
                 if appointment_list[j][i]:
+                    appt_parameters={}
                     #print(j,i)
                     #print(appointment_list[j][i][0]['first_name'])
-                    data.append(appointment_list[j][i][0]['first_name'] + " " + appointment_list[j][i][0]['last_name'])
+
+                    data.append(appointment_list[j][i])
                 else:
                     #print(j,i)
                     data.append("")
@@ -160,6 +166,7 @@ class Appointment(models.Model):
     #CREATES CONTEXT FOR THE TEMPLATE
     @staticmethod
     def get_context_new(*args):
+        #The function is used by both 'Change Date' button as well as home page context creation. So selects the date accordingly. If it is from the date change button, then the date needs to be incremented or decremented. Otherwise use current date.
         if not args:
             today_date = Appointment.currentdate()
         else:
@@ -168,6 +175,7 @@ class Appointment(models.Model):
         doctor_list = Doctor.get_list_doctors()
         selected_doctor_list = Doctor.get_selected_doctors()
 
+        #Number of doctors for iteration
         num_lists = int(selected_doctor_list.count())
         apptlists = []
 
@@ -175,7 +183,7 @@ class Appointment(models.Model):
 
         slots = Appointment.create_daily_slots()
 
-        #today_date = date(2018,9,22)
+
         context_appointment = []
         for doctor in selected_doctor_list:
             apptlists=[]

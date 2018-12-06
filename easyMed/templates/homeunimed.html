@@ -62,19 +62,20 @@
         {% for item_row in appointment_list %}
           <tr>
 
-              {% for item in item_row %}
-               {% if item %}
+                {% for item in item_row %}
                 <td> {{item}} </td>
-                {% else %}
+
+
+                {% empty %}
                 <td>
                   <a href="http://example.com">
                     <p class="text-success">
                     Book </p>
                   </a>
                 </td>
-                {% endif %}
-              {% endfor %}
-        {% endfor %}
+                {% endfor %}
+
+          {% endfor %}
           </tr>
 
           </tbody>

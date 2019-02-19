@@ -63,17 +63,17 @@
           <tr>
 
               {% for item in item_row %}
-               {% if item %}
-                <td> {{item}} </td>
-                {% else %}
+               {% if item.content %}
+                <td> {{item.content}} </td>
+               {% else %}
                 <td>
-                  <a href="http://example.com">
+                  <a href="{% url 'book' item.doctor item.slot %}">
                     <p class="text-success">
                     Book </p>
                   </a>
                 </td>
-                {% endif %}
-              {% endfor %}
+               {% endif %}
+             {% endfor %}
         {% endfor %}
           </tr>
 

@@ -13,4 +13,7 @@ def homeunimed(request):
 
     response_html = '<br>'.join(appointments_list)
 
+    print(response_html)
+    print("Being used")
+
     return HttpResponse(response_html)

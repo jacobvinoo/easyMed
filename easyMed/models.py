@@ -141,18 +141,34 @@ class Appointment(models.Model):
 
         #POPULATE REST OF TABLE WTIH SLOT AND PATIENT FULL NAME
 
+
         for i in range(0,slot_numbers):
-            data=[]
-            data.append(slots[i])
+            #data=[]
+            row = []
+            data={}
+            #data.append(slots[i])
+            data['content']=slots[i]
+            data['doctor']=""
+            data['slot']=slots[i]
+            row.append(data)
+
+            data={}
             for j in range(0,doctor_numbers):
+                data['doctor']=doctor_list[j]['id']
+                data['slot']=slots[i]
                 if appointment_list[j][i]:
                     #print(j,i)
                     #print(appointment_list[j][i][0]['first_name'])
-                    data.append(appointment_list[j][i][0]['first_name'] + " " + appointment_list[j][i][0]['last_name'])
+                    #data.append(appointment_list[j][i][0]['first_name'] + " " + appointment_list[j][i][0]['last_name'])
+                    data['content']=appointment_list[j][i][0]['first_name'] + " " + appointment_list[j][i][0]['last_name']
+                    row.append(data)
+
                 else:
                     #print(j,i)
-                    data.append("")
-            appt_list.append(data)
+                    #data.append("")
+                    data['content']=""
+                    row.append(data)
+            appt_list.append(row)
 
         #print(appt_list)
         return appt_list
@@ -193,6 +209,7 @@ class Appointment(models.Model):
         context['selected_doctor_list'] = selected_doctor_list
         context['appointment_list']= Appointment.make_table(selected_doctor_list, slots, context_appointment,  num_lists, no_of_slots)
 
+        print(context)
         return(context)
 
 
